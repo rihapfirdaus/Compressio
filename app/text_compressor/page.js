@@ -79,14 +79,15 @@ export default function TextCompressor() {
               <p>{response.algorithm}</p>
               <p className="font-bold">Size: </p>
               <ol className="list-disc list-inside">
-                <li>Compressed: {response.size.compressed}</li>
-                <li>Decompressed: {response.size.decompressed}</li>
+                <li>Original: {response.size.original} mb</li>
+                <li>Compressed: {response.size.compressed} mb</li>
+                <li>Decompressed: {response.size.decompressed} mb</li>
               </ol>
 
               <p className="font-bold">Time: </p>
               <ol className="list-disc list-inside">
-                <li>Compressed: {response.time.compressed}</li>
-                <li>Decompressed: {response.time.decompressed}</li>
+                <li>Compressed: {response.time.compressed} s</li>
+                <li>Decompressed: {response.time.decompressed} s</li>
               </ol>
             </div>
 
@@ -135,7 +136,7 @@ export default function TextCompressor() {
               required
               type="file"
               className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
-              accept=".txt"
+              accept=".txt,.docx,.pdf,.ppt,.pptx,.xlsx,.json"
               onChange={handleFileChange}
             />
             <p>Select Algorithm:</p>
