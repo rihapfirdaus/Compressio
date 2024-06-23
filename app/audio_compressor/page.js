@@ -59,7 +59,9 @@ export default function AudioCompressor() {
     } catch (error) {
       setSpinner(false);
 
-      alert(`An error occurred: ${error.message}. Please tell the developer.`);
+      alert(
+        `An error occurred: ${error.message}.\nPlease tell the developer or check the network connection.`
+      );
     }
   };
 
@@ -70,12 +72,12 @@ export default function AudioCompressor() {
           <img src="/loading.svg" className="size-20" />
         </div>
       )}
-      <div className="flex flex-col gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-8 md:py-16 md:px-24">
-        <FileAudio className="size-16" />
-        <h1 className="text-3xl">Audio Compressor</h1>
+      <div className="flex flex-col gap-4 md:gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-4 md:py-16 md:px-24 relative">
+        <FileAudio className="size-12 md:size-16" />
+        <h1 className="text-2xl md:text-3xl">Audio Compressor</h1>
 
         {response.algorithm ? (
-          <div className="flex flex-col gap-4 w-80 md:w-full md:min-w-96">
+          <div className="flex flex-col gap-2 md:gap-4 w-80 md:w-full md:min-w-96">
             <div className="flex flex-col w-full gap-2">
               <p className="font-bold">Selected file:</p>
               <p>{file?.name}</p>
@@ -127,13 +129,13 @@ export default function AudioCompressor() {
               <ArrowLeft />
             </Link>
             <form
-              className="flex flex-col gap-4 text-center justify-center items-center w-80 min-w-80 md:w-full md:min-w-96"
+              className="flex flex-col gap-4 text-center justify-center items-center w-80 md:w-full md:min-w-96"
               onSubmit={handleSubmit}
             >
               <input
                 required
                 type="file"
-                className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
+                className="border w-11/12 md:w-full border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
                 accept="audio/*"
                 onChange={handleFileChange}
               />

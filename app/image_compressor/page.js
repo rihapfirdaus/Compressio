@@ -66,7 +66,9 @@ export default function ImageCompressor() {
       setSpinner(false);
     } catch (error) {
       setSpinner(false);
-      alert(`An error occurred: ${error.message}. Please tell the developer.`);
+      alert(
+        `An error occurred: ${error.message}.\nPlease tell the developer or check the network connection.`
+      );
     }
   };
 
@@ -96,7 +98,7 @@ export default function ImageCompressor() {
               <p>{response.url ? "before:" : "preview:"}</p>
               <img
                 src={preview}
-                className="max-w-96"
+                className="max-w-80 md:max-w-96"
                 alt={response.url ? "image before" : "image preview"}
               />
             </div>
@@ -105,7 +107,7 @@ export default function ImageCompressor() {
                 <p>after:</p>
                 <img
                   src={response.url}
-                  className="max-w-96"
+                  className="max-w-80 md:max-w-96"
                   alt="image after"
                 />
               </div>
@@ -113,12 +115,12 @@ export default function ImageCompressor() {
           </div>
         </div>
       )}
-      <div className="flex flex-col gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-8 md:py-16 md:px-24 relative">
-        <FileImage className="size-16" />
-        <h1 className="text-3xl">Image Compressor</h1>
+      <div className="flex flex-col gap-4 md:gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-4 md:py-16 md:px-24 relative">
+        <FileImage className="size-12 md:size-16" />
+        <h1 className="text-2xl md:text-3xl">Image Compressor</h1>
 
         {response.algorithm ? (
-          <div className="flex flex-col gap-4 w-80 md:w-full md:min-w-96">
+          <div className="flex flex-col gap-2 md:gap-4 w-80 md:w-full md:min-w-96">
             <div className="flex flex-col w-full gap-2">
               <p className="font-bold">Selected file:</p>
               <p>{file?.name}</p>
@@ -132,6 +134,12 @@ export default function ImageCompressor() {
 
               <p className="font-bold">Time: </p>
               <p>{response.time} s</p>
+              <button
+                className="underline self-start font-bold"
+                onClick={() => setShowImage(true)}
+              >
+                See the difference
+              </button>
             </div>
 
             <p className="w-full text-center mt-4">download:</p>
@@ -142,12 +150,6 @@ export default function ImageCompressor() {
             >
               Compressed
             </a>
-            <button
-              className="hover:underline"
-              onClick={() => setShowImage(true)}
-            >
-              see the difference
-            </button>
 
             <div className="w-full flex justify-center items-center p-2 gap-2">
               <Link
@@ -175,13 +177,13 @@ export default function ImageCompressor() {
               <ArrowLeft />
             </Link>
             <form
-              className="flex flex-col gap-4 text-center justify-center items-center w-80 min-w-80 md:w-full md:min-w-96"
+              className="flex flex-col gap-4 text-center justify-center items-center w-80 md:w-full md:min-w-96"
               onSubmit={handleSubmit}
             >
               <input
                 required
                 type="file"
-                className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
+                className="border w-11/12 md:w-full border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
                 accept=".png,.jpg,.jpeg"
                 onChange={handleFileChange}
               />
@@ -190,7 +192,7 @@ export default function ImageCompressor() {
                 type="button"
                 className={`${
                   preview ? "visible" : "invisible"
-                } hover:underline cursor-pointer`}
+                } underline cursor-pointer`}
                 onClick={() => {
                   setShowImage(true);
                 }}
