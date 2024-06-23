@@ -1,16 +1,11 @@
 "use client";
-import {
-  ArrowLeft,
-  FileImage,
-  FileText,
-  Home,
-  RotateCcw,
-  X,
-} from "lucide-react";
+import { ArrowLeft, FileImage, Home, RotateCcw, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function ImageCompressor() {
+  const [spinner, setSpinner] = useState(false);
+
   const [file, setFile] = useState(null);
   const [algorithm, setAlgorithm] = useState("");
   const [preview, setPreview] = useState("");
@@ -32,7 +27,6 @@ export default function ImageCompressor() {
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreview(e.target.result);
-      console.log(e.target.result);
     };
     reader.readAsDataURL(event.target.files[0]);
   };
@@ -52,6 +46,7 @@ export default function ImageCompressor() {
     const formData = new FormData();
     formData.append("file", file);
 
+    setSpinner(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/image/compress?algorithm=${algorithm}`,
@@ -68,13 +63,20 @@ export default function ImageCompressor() {
       const result = await response.json();
 
       setResponse(result.data);
+      setSpinner(false);
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      setSpinner(false);
+      alert(`An error occurred: ${error.message}. Please tell the developer.`);
     }
   };
 
   return (
     <main className="box-border grid place-items-center w-screen h-screen">
+      {spinner && (
+        <div className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-md w-full h-full grid place-items-center z-10">
+          <img src="/loading.svg" className="size-20" />
+        </div>
+      )}
       {showImage && (
         <div
           className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-md w-full h-full grid place-items-center z-10"

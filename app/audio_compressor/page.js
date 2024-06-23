@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function AudioCompressor() {
+  const [spinner, setSpinner] = useState(false);
+
   const [file, setFile] = useState(null);
   const [algorithm, setAlgorithm] = useState("");
   const [response, setResponse] = useState({
@@ -36,6 +38,7 @@ export default function AudioCompressor() {
     const formData = new FormData();
     formData.append("file", file);
 
+    setSpinner(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/audio/compress?algorithm=${algorithm}`,
@@ -52,13 +55,21 @@ export default function AudioCompressor() {
       const result = await response.json();
 
       setResponse(result.data);
+      setSpinner(false);
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      setSpinner(false);
+
+      alert(`An error occurred: ${error.message}. Please tell the developer.`);
     }
   };
 
   return (
     <main className="box-border grid place-items-center w-screen h-screen">
+      {spinner && (
+        <div className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-md w-full h-full grid place-items-center z-10">
+          <img src="/loading.svg" className="size-20" />
+        </div>
+      )}
       <div className="flex flex-col gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-8 md:py-16 md:px-24">
         <FileAudio className="size-16" />
         <h1 className="text-3xl">Audio Compressor</h1>
