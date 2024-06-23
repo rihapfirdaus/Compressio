@@ -1,6 +1,5 @@
 import { FileAudio, FileImage, FileText, FileVideo, Video } from "lucide-react";
 import { Supermercado_One } from "next/font/google";
-import Image from "next/image";
 import Link from "next/link";
 
 const supermercado = Supermercado_One({
@@ -61,6 +60,12 @@ export default function Home() {
           </Link>
         </div>
       </div>
+      <Link
+        className="absolute bottom-4 underline hover:scale-105"
+        href="/about_us"
+      >
+        About Us
+      </Link>
     </main>
   );
 }
