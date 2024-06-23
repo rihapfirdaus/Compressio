@@ -29,7 +29,7 @@ export default function Home() {
           </Link>
 
           <Link
-            href="#"
+            href="/image_compressor"
             className="group flex flex-col gap-2 items-center justify-center cursor-pointer transition-all ease-in-out hover:text-yellow-500 hover:scale-110 hover:animate-pulse"
           >
             <FileImage className="size-16" />
@@ -39,7 +39,7 @@ export default function Home() {
           </Link>
 
           <Link
-            href="#"
+            href="/audio_compressor"
             className="group flex flex-col gap-2 items-center justify-center cursor-pointer transition-all ease-in-out  hover:text-green-500 hover:scale-110 hover:animate-pulse"
           >
             <FileAudio className="size-16" />
@@ -49,7 +49,7 @@ export default function Home() {
           </Link>
 
           <Link
-            href="#"
+            href="/video_compressor"
             className="group flex flex-col gap-2 items-center justify-center cursor-pointer transition-all ease-in-out  hover:hover:text-red-500 hover:scale-110 hover:animate-pulse"
           >
             <FileVideo className="size-16" />
