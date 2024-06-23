@@ -1,9 +1,9 @@
 "use client";
-import { FileAudio, Home, RotateCcw } from "lucide-react";
+import { ArrowLeft, FileAudio, Home, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function TextCompressor() {
+export default function AudioCompressor() {
   const [file, setFile] = useState(null);
   const [algorithm, setAlgorithm] = useState("");
   const [response, setResponse] = useState({
@@ -108,47 +108,55 @@ export default function TextCompressor() {
             </div>
           </div>
         ) : (
-          <form
-            className="flex flex-col gap-4 text-center justify-center items-center w-80 min-w-80 md:w-full md:min-w-96"
-            onSubmit={handleSubmit}
-          >
-            <input
-              required
-              type="file"
-              className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
-              accept="audio/*"
-              onChange={handleFileChange}
-            />
-            <p>Select Algorithm:</p>
-            <div className="flex w-fit">
-              <label className="flex gap-2 justify-center items-center py-2 px-4">
-                <input
-                  type="radio"
-                  name="algorithm"
-                  value="mp3"
-                  className="accent-blue-500"
-                  onChange={handleAlgorithmChange}
-                />
-                mp3
-              </label>
-              <label className="flex gap-2 justify-center items-center py-2 px-4">
-                <input
-                  type="radio"
-                  name="algorithm"
-                  value="aac"
-                  className="accent-blue-500"
-                  onChange={handleAlgorithmChange}
-                />
-                aac
-              </label>
-            </div>
-            <button
-              type="submit"
-              className="py-2 px-4 bg-blue-500 text-white rounded-xl hover:scale-105"
+          <>
+            <Link
+              href="/"
+              className="text-bold hover:bg-blue-500 p-2 rounded-full hover:text-white absolute top-0 left-0 m-4"
             >
-              Compress Audio
-            </button>
-          </form>
+              <ArrowLeft />
+            </Link>
+            <form
+              className="flex flex-col gap-4 text-center justify-center items-center w-80 min-w-80 md:w-full md:min-w-96"
+              onSubmit={handleSubmit}
+            >
+              <input
+                required
+                type="file"
+                className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
+                accept="audio/*"
+                onChange={handleFileChange}
+              />
+              <p>Select Algorithm:</p>
+              <div className="flex w-fit">
+                <label className="flex gap-2 justify-center items-center py-2 px-4">
+                  <input
+                    type="radio"
+                    name="algorithm"
+                    value="mp3"
+                    className="accent-blue-500"
+                    onChange={handleAlgorithmChange}
+                  />
+                  mp3
+                </label>
+                <label className="flex gap-2 justify-center items-center py-2 px-4">
+                  <input
+                    type="radio"
+                    name="algorithm"
+                    value="aac"
+                    className="accent-blue-500"
+                    onChange={handleAlgorithmChange}
+                  />
+                  aac
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="py-2 px-4 bg-blue-500 text-white rounded-xl hover:scale-105"
+              >
+                Compress Audio
+              </button>
+            </form>
+          </>
         )}
       </div>
     </main>
