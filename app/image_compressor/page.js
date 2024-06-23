@@ -1,11 +1,20 @@
 "use client";
-import { FileImage, FileText, Home, RotateCcw } from "lucide-react";
+import {
+  ArrowLeft,
+  FileImage,
+  FileText,
+  Home,
+  RotateCcw,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function TextCompressor() {
+export default function ImageCompressor() {
   const [file, setFile] = useState(null);
   const [algorithm, setAlgorithm] = useState("");
+  const [preview, setPreview] = useState("");
+  const [showImage, setShowImage] = useState(false);
   const [response, setResponse] = useState({
     type: "",
     algorithm: "",
@@ -19,6 +28,13 @@ export default function TextCompressor() {
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreview(e.target.result);
+      console.log(e.target.result);
+    };
+    reader.readAsDataURL(event.target.files[0]);
   };
 
   const handleAlgorithmChange = (event) => {
@@ -59,7 +75,43 @@ export default function TextCompressor() {
 
   return (
     <main className="box-border grid place-items-center w-screen h-screen">
-      <div className="flex flex-col gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-8 md:py-16 md:px-24">
+      {showImage && (
+        <div
+          className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-md w-full h-full grid place-items-center z-10"
+          onClick={() => setShowImage(false)}
+        >
+          <button
+            className="text-bold hover:bg-blue-500 p-2 rounded-full hover:text-white absolute top-0 right-0 m-4"
+            onClick={() => setShowImage(false)}
+          >
+            <X />
+          </button>
+          <div
+            className="flex gap-4 flex-wrap justify-center items-center p-4 w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col gap-2 justify-center items-center">
+              <p>{response.url ? "before:" : "preview:"}</p>
+              <img
+                src={preview}
+                className="max-w-96"
+                alt={response.url ? "image before" : "image preview"}
+              />
+            </div>
+            {response.url && (
+              <div className="flex flex-col gap-2 justify-center items-center">
+                <p>after:</p>
+                <img
+                  src={response.url}
+                  className="max-w-96"
+                  alt="image after"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      <div className="flex flex-col gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-8 md:py-16 md:px-24 relative">
         <FileImage className="size-16" />
         <h1 className="text-3xl">Image Compressor</h1>
 
@@ -81,7 +133,6 @@ export default function TextCompressor() {
             </div>
 
             <p className="w-full text-center mt-4">download:</p>
-
             <a
               href={response.url}
               download
@@ -89,6 +140,12 @@ export default function TextCompressor() {
             >
               Compressed
             </a>
+            <button
+              className="hover:underline"
+              onClick={() => setShowImage(true)}
+            >
+              see the difference
+            </button>
 
             <div className="w-full flex justify-center items-center p-2 gap-2">
               <Link
@@ -108,47 +165,68 @@ export default function TextCompressor() {
             </div>
           </div>
         ) : (
-          <form
-            className="flex flex-col gap-4 text-center justify-center items-center w-80 min-w-80 md:w-full md:min-w-96"
-            onSubmit={handleSubmit}
-          >
-            <input
-              required
-              type="file"
-              className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
-              accept=".png,.jpg,.jpeg"
-              onChange={handleFileChange}
-            />
-            <p>Select Algorithm:</p>
-            <div className="flex w-fit">
-              <label className="flex gap-2 justify-center items-center py-2 px-4">
-                <input
-                  type="radio"
-                  name="algorithm"
-                  value="jpeg"
-                  className="accent-blue-500"
-                  onChange={handleAlgorithmChange}
-                />
-                jpeg
-              </label>
-              <label className="flex gap-2 justify-center items-center py-2 px-4">
-                <input
-                  type="radio"
-                  name="algorithm"
-                  value="webp"
-                  className="accent-blue-500"
-                  onChange={handleAlgorithmChange}
-                />
-                webp
-              </label>
-            </div>
-            <button
-              type="submit"
-              className="py-2 px-4 bg-blue-500 text-white rounded-xl hover:scale-105"
+          <>
+            <Link
+              href="/"
+              className="text-bold hover:bg-blue-500 p-2 rounded-full hover:text-white absolute top-0 left-0 m-4"
             >
-              Compress Image
-            </button>
-          </form>
+              <ArrowLeft />
+            </Link>
+            <form
+              className="flex flex-col gap-4 text-center justify-center items-center w-80 min-w-80 md:w-full md:min-w-96"
+              onSubmit={handleSubmit}
+            >
+              <input
+                required
+                type="file"
+                className="border border-white rounded-2xl p-1 file:py-2 file:border-none file:px-4 file:rounded-xl"
+                accept=".png,.jpg,.jpeg"
+                onChange={handleFileChange}
+              />
+
+              <button
+                type="button"
+                className={`${
+                  preview ? "visible" : "invisible"
+                } hover:underline cursor-pointer`}
+                onClick={() => {
+                  setShowImage(true);
+                }}
+              >
+                preview
+              </button>
+
+              <p>Select Algorithm:</p>
+              <div className="flex w-fit">
+                <label className="flex gap-2 justify-center items-center py-2 px-4">
+                  <input
+                    type="radio"
+                    name="algorithm"
+                    value="jpeg"
+                    className="accent-blue-500"
+                    onChange={handleAlgorithmChange}
+                  />
+                  jpeg
+                </label>
+                <label className="flex gap-2 justify-center items-center py-2 px-4">
+                  <input
+                    type="radio"
+                    name="algorithm"
+                    value="webp"
+                    className="accent-blue-500"
+                    onChange={handleAlgorithmChange}
+                  />
+                  webp
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="py-2 px-4 bg-blue-500 text-white rounded-xl hover:scale-105"
+              >
+                Compress Image
+              </button>
+            </form>
+          </>
         )}
       </div>
     </main>
