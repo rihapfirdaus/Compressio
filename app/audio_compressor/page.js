@@ -1,5 +1,5 @@
 "use client";
-import { ArrowLeft, FileAudio, Home, RotateCcw } from "lucide-react";
+import { ArrowLeft, FileAudio, Home, RotateCcw, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -8,6 +8,8 @@ export default function AudioCompressor() {
 
   const [file, setFile] = useState(null);
   const [algorithm, setAlgorithm] = useState("");
+  const [preview, setPreview] = useState("");
+  const [showAudio, setShowAudio] = useState(false);
   const [response, setResponse] = useState({
     type: "",
     algorithm: "",
@@ -21,6 +23,12 @@ export default function AudioCompressor() {
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreview(e.target.result);
+    };
+    reader.readAsDataURL(event.target.files[0]);
   };
 
   const handleAlgorithmChange = (event) => {
@@ -72,6 +80,45 @@ export default function AudioCompressor() {
           <img src="/loading.svg" className="size-20" />
         </div>
       )}
+
+      {showAudio && (
+        <div
+          className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-md w-full h-full grid place-items-center z-10"
+          onClick={() => setShowAudio(false)}
+        >
+          <button
+            className="text-bold hover:bg-blue-500 p-2 rounded-full hover:text-white absolute top-0 right-0 m-4"
+            onClick={() => setShowAudio(false)}
+          >
+            <X />
+          </button>
+          <div
+            className="flex gap-4 flex-wrap justify-center items-center p-4 w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col gap-2 justify-center items-center">
+              <p>{response.url ? "before:" : "preview:"}</p>
+              <audio
+                src={preview}
+                className="max-w-80 md:max-w-96"
+                alt={response.url ? "audio before" : "audio preview"}
+                controls
+              />
+            </div>
+            {response.url && (
+              <div className="flex flex-col gap-2 justify-center items-center">
+                <p>after:</p>
+                <audio
+                  src={response.url}
+                  className="max-w-80 md:max-w-96"
+                  alt="audio after"
+                  controls
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       <div className="flex flex-col gap-4 md:gap-8 justify-center items-center bg-glass shadow-2xl py-8 px-4 md:py-16 md:px-24 relative">
         <FileAudio className="size-12 md:size-16" />
         <h1 className="text-2xl md:text-3xl">Audio Compressor</h1>
@@ -88,9 +135,14 @@ export default function AudioCompressor() {
                 <li>Original: {response.size.original} mb</li>
                 <li>Compressed: {response.size.compressed} mb</li>
               </ol>
-
               <p className="font-bold">Time: </p>
               <p>{response.time} s</p>
+              <button
+                className="underline self-start font-bold"
+                onClick={() => setShowAudio(true)}
+              >
+                See the difference
+              </button>
             </div>
 
             <p className="w-full text-center mt-4">download:</p>
@@ -139,6 +191,19 @@ export default function AudioCompressor() {
                 accept="audio/*"
                 onChange={handleFileChange}
               />
+
+              <button
+                type="button"
+                className={`${
+                  preview ? "visible" : "invisible"
+                } underline cursor-pointer`}
+                onClick={() => {
+                  setShowAudio(true);
+                }}
+              >
+                preview
+              </button>
+
               <p>Select Algorithm:</p>
               <div className="flex w-fit">
                 <label className="flex gap-2 justify-center items-center py-2 px-4">
